@@ -8,16 +8,16 @@ using namespace std;
 class Product
 {
 public:
-    Product(int id, const std::string& name, double price);
+    Product(int id, const std::string& name, int price);
     int getId() const;
     std::string getName() const;
-    double getPrice() const;
+    int getPrice() const;
     void setName(const std::string& name);
-    void setPrice(double price);
+    void setPrice(int price);
 private:
     int m_id;
     std::string m_name;
-    double m_price;
+    int m_price;
 
 };
 

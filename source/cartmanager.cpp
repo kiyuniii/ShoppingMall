@@ -32,17 +32,19 @@ void CartManager::writeCartCSV() {
             Cart *p = v.second;
             file << p->getId() << ", ";
             file << p->getNum() << endl;
-            delete v.second;
+            //delete v.second;
         }
     }
-    cartList.clear();
+    //cartList.clear();
     file.close();
 }
 
 CartManager::CartManager() {
+    readCartCSV();
 }
 
 CartManager::~CartManager() {
+    writeCartCSV();
 }
 
 vector<string> CartManager::parseCSV(istream &file, char delimiter) {
@@ -87,7 +89,7 @@ bool CartManager::displayMenu() {
         getchar();
         break;
     case 2: 
-        addCart();
+        inputCart();
         cin.ignore();   //#############
         getchar();
         break;
@@ -104,7 +106,7 @@ bool CartManager::displayMenu() {
         modifyCart(key);
         break;
     case 5:
-        saveList();
+        //saveList();
         return false;
     default:
         std::cout << '\n' << "Wrong input... try again." << '\n';
@@ -118,68 +120,89 @@ bool CartManager::displayMenu() {
 
 void CartManager::displayInfo() {
     readCartCSV();
+    
+    // `productList.csv` 파일을 열고 데이터를 읽습니다.
+    ifstream productFile(productListPath);
+    if (!productFile.is_open()) {
+        cout << "Error: Unable to open product list file." << endl;
+        return;
+    }
+    map<int, pair<string, int>> productInfo;
 
-    cout << endl << "  ID  |     Name     | Price | "<< endl;
+    // CSV 파일에서 데이터를 읽어 제품 정보를 저장합니다.
+    while (!productFile.eof()) {
+        vector<string> row = parseCSV(productFile, ',');
+        if (row.size() == 3) {
+            int id = atoi(row[0].c_str());
+            string name = row[1];
+            int price = atoi(row[2].c_str());
+            productInfo[id] = make_pair(name, price);
+        }
+    }
+    productFile.close(); // 파일 닫기
+
+    cout << endl << "  ID  |     Name     |   Price   |  Qty  | Total Price |" << endl;
+    cout << "------------------------------------------------------" << endl; // 추가한 구분선
     for (const auto& v : cartList) {
         Cart* p = v.second;
-        cout << setw(5) << setfill('0') << right << p->getId() << " | " << left;
-        cout << setw(12) << setfill(' ') << " | ";
-        cout << setw(12) << p->getNum() << endl;
+        int id = p->getId();
+        
+        // 제품 ID에 해당하는 이름과 가격을 검색하여 출력
+        if (productInfo.find(id) != productInfo.end()) {
+            int price = productInfo[id].second;
+            int quantity = p->getNum();
+            int totalPrice = price * quantity;
+
+            cout << setw(5) << setfill('0') << right << id << " | "; // ID 출력
+            cout << setw(12) << setfill(' ') << left << productInfo[id].first << " | "; // Name 출력
+            cout << setw(9) << setfill(' ') << right << fixed << setprecision(2) << price << " | "; // Price 출력, 우측 정렬
+            cout << setw(3) << setfill(' ') << right << (quantity < 10 ? " " : "") << quantity << " | "; // Qty 출력, 가운데 정렬
+            cout << setw(11) << setfill(' ') << right << fixed << setprecision(2) << totalPrice << " | "; // Total Price 출력, 우측 정렬
+            cout << endl;
+        } else {
+            // 제품 정보가 없는 경우에 대한 처리 (예: 오류 메시지)
+            cout << setw(5) << setfill('0') << right << id << " | ";
+            cout << setw(12) << setfill(' ') << left << "Unknown" << " | ";
+            cout << setw(9) << setfill(' ') << right << "N/A" << " | ";
+            cout << setw(3) << setfill(' ') << right << (p->getNum() < 10 ? " " : "") << p->getNum() << " | "; // Qty 출력, 가운데 정렬
+            cout << setw(11) << setfill(' ') << right << "N/A" << " | "; // Total Price 출력, 우측 정렬
+            cout << endl;
+        }
     }
 }
 
-void CartManager::addCart() {
-    
-/*  ProductManager productManager;
-    productManager.displayInfo();
-    
-    int id;
-    cout << "Enter Product ID to ADD to your cart: ";
-    cin >> id;
+void CartManager::inputCart() {
+    int id, num;
+    cout << "ID : "; cin >> id;
+    cout << "num : "; cin >> num;
 
-    cout << endl << endl;
-    Product* product = productManager.search(id);
-
-    if(product)  {
-        Cart* cartItem = new Cart(product->getId(), product->getName(), product->getPrice());
-        cartList.insert({id, cartItem});
-        puts("product added successfully");
-    } else {
-        puts("product not found");
-    }
-    saveList(); */
-    
+    //makeId()하지 않고 단순히 id값을 넣음
+    Cart* q = new Cart(id, num);
+    cartList.insert({id, q});
 }
 
 void CartManager::deleteCart(int key) {
     cartList.erase(key);   
-    saveList();
+    //saveList();
 }
 
 /* 구매수량 변경 */
 void CartManager::modifyCart(int key) {
-/*     Cart* p = search(key);
-    cout << "  ID  |     Name     | Price | " << endl;
-    cout << setw(5) << setfill('0') << right << p->getId() << " | " << left;
-    cout << setw(12) << setfill(' ') << " | ";
-    cout << setw(12) << p->getNum() << endl;
+    Cart* q = search(key);
 
-    string name;
-    double price = 0.0;
-    cout << "name : "; cin.ignore(); getline(cin, name, '\n');
-    cout << "price : "; cin >> price;
+    int num;
+    cout << "num : "; cin >> num;
 
-    p->setName(name);
-    p->setPrice(price);
-    cartList[key] = p;   
-
-    saveList(); */
+    q->setNum(num);
+    cartList[num] = q;
+    writeCartCSV();
 }
 
 Cart *CartManager::search(int id) {
     return cartList[id];
 }
 
-void CartManager::saveList() {
+/* void CartManager::saveList() {
     writeCartCSV();
 }
+ */

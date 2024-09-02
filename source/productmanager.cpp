@@ -22,7 +22,7 @@ void ProductManager::readProductCSV() {
             vector<string> row = parseCSV(file, ',');
             if (row.size()) {
                 int id = atoi(row[0].c_str());
-                double price = atof(row[2].c_str());
+                int price = atoi(row[2].c_str());
                 Product* p = new Product(id, row[1], price);    //productList: 맵{키, 값}
                 productList.insert({id, p});    //productList(헤더에서 선언)에 읽은데이터 저장
             }                                   //lifetime: main의 객체, pm이 종료될 때까지
@@ -65,7 +65,7 @@ ProductManager::~ProductManager(){
 void ProductManager::inputProduct()
 {
     std::string name;
-    double price;
+    int price;
     cout << "name : "; cin.ignore(); getline(cin, name, '\n');
     cout << "price : "; cin >> price;
 
@@ -90,7 +90,7 @@ void ProductManager::modifyProduct(int key)
 
     /* 새로운 값(이름, 가격) 입력 */
     string name;
-    double price = 0.0;
+    int price = 0.0;
     cout << "name : "; cin.ignore(); getline(cin, name, '\n');
     cout << "price : "; cin >> price;
 
@@ -197,7 +197,6 @@ bool ProductManager::displayMenu()
         cin.clear();
     }
     return true;
-
 }
 
 

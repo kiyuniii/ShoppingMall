@@ -21,12 +21,12 @@ public:
 
     bool displayMenu();
     void displayInfo();
-    void addCart();
+    void inputCart();
     void deleteCart(int);
     void modifyCart(int);
 
     Cart* search(int);
-    void saveList();
+    //void saveList();
 
     static const string productListPath;
     static const string cartListPath;
