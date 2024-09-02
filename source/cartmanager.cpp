@@ -1,21 +1,22 @@
 #include "cartmanager.h"
 #include "cart.h"
-#include "product.h"    
-#include "productmanager.h"
 
 #include <sstream>
 #include <iomanip>
 
+const string CartManager::productListPath = "data/productlist.csv";
+const string CartManager::cartListPath = "data/cartlist.csv";
+
 void CartManager::readCartCSV() {
     ifstream file;
-    file.open("data/cartlist.txt");
+    file.open(cartListPath);
     if(!file.fail()) {
         while(!file.eof()) {
             vector<string> row = parseCSV(file, ',');
             if(row.size()) {
                 int id = atoi(row[0].c_str());
-                double price = atof(row[2].c_str());
-                Cart* p = new Cart(id, row[1], price);
+                int num = atoi(row[1].c_str());
+                Cart* p = new Cart(id, num);
                 cartList.insert( {id, p });                
             }
         }
@@ -25,12 +26,12 @@ void CartManager::readCartCSV() {
 
 void CartManager::writeCartCSV() {
     ofstream file;
-    file.open("data/cartList.txt");
+    file.open(cartListPath);
     if(!file.fail()) {
         for (const auto& v : cartList) {
             Cart *p = v.second;
-            file << p->getId() << ", " << p->getName() << ", ";
-            file << p->getPrice() << endl;
+            file << p->getId() << ", ";
+            file << p->getNum() << endl;
             delete v.second;
         }
     }
@@ -116,37 +117,20 @@ bool CartManager::displayMenu() {
 }
 
 void CartManager::displayInfo() {
-    ifstream file;
-    file.open("data/cartList.txt");
-
-    if(!file.fail()) {
-        cartList.clear();  // 기존 데이터를 지우고 새로 읽어옴
-
-        while(!file.eof()) {
-            vector<string> row = parseCSV(file, ',');
-            if(row.size() == 3) {  // 파일 형식이 ID, Name, Price인지 확인
-                int id = atoi(row[0].c_str());
-                double price = atof(row[2].c_str());
-                Cart* p = new Cart(id, row[1], price);
-                cartList.insert({id, p});
-            }
-        }
-    } else {
-        cerr << "Failed to open cartList.txt for reading." << endl;
-    }
-    file.close();
+    readCartCSV();
 
     cout << endl << "  ID  |     Name     | Price | "<< endl;
     for (const auto& v : cartList) {
         Cart* p = v.second;
         cout << setw(5) << setfill('0') << right << p->getId() << " | " << left;
-        cout << setw(12) << setfill(' ') << p->getName() << " | ";
-        cout << setw(12) << p->getPrice() << endl;
+        cout << setw(12) << setfill(' ') << " | ";
+        cout << setw(12) << p->getNum() << endl;
     }
 }
 
 void CartManager::addCart() {
-    ProductManager productManager;
+    
+/*  ProductManager productManager;
     productManager.displayInfo();
     
     int id;
@@ -163,7 +147,8 @@ void CartManager::addCart() {
     } else {
         puts("product not found");
     }
-    saveList();
+    saveList(); */
+    
 }
 
 void CartManager::deleteCart(int key) {
@@ -173,11 +158,11 @@ void CartManager::deleteCart(int key) {
 
 /* 구매수량 변경 */
 void CartManager::modifyCart(int key) {
-    Cart* p = search(key);
+/*     Cart* p = search(key);
     cout << "  ID  |     Name     | Price | " << endl;
     cout << setw(5) << setfill('0') << right << p->getId() << " | " << left;
-    cout << setw(12) << setfill(' ') << p->getName() << " | ";
-    cout << setw(12) << p->getPrice() << endl;
+    cout << setw(12) << setfill(' ') << " | ";
+    cout << setw(12) << p->getNum() << endl;
 
     string name;
     double price = 0.0;
@@ -188,7 +173,7 @@ void CartManager::modifyCart(int key) {
     p->setPrice(price);
     cartList[key] = p;   
 
-    saveList();
+    saveList(); */
 }
 
 Cart *CartManager::search(int id) {
@@ -196,30 +181,5 @@ Cart *CartManager::search(int id) {
 }
 
 void CartManager::saveList() {
-    ofstream file;
-    file.open("data/cartList.txt");
-
-    if(!file.fail()) {
-        for(const auto& v : cartList) {
-            Cart *p = v.second;
-            file << p->getId() << ", " << p->getName() << ", " <<p->getPrice() << endl; 
-        }
-    } else {
-        cerr << "Failed to open the file for writing" << endl;
-    }
-    file.close();
-}
-
-/* modifyProduct --(같은ID)--> cartList 수정 */
-void CartManager::updateCartItem(int id, const string& name, double price) {
-    auto it = cartList.find(id);
-    if (it != cartList.end()) {
-        Cart* cartItem = it->second;
-        cartItem->setName(name);
-        cartItem->setPrice(price);
-        saveList();  
-        cout << "Cart item updated successfully." << endl;
-    } else {
-        cout << "Product ID not found in cart." << endl;
-    }
+    writeCartCSV();
 }

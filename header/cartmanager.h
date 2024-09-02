@@ -15,9 +15,9 @@ public:
     CartManager();
     ~CartManager();
 
-    vector<string> parseCSV(istream &file, char);
     void readCartCSV();
     void writeCartCSV();        
+    vector<string> parseCSV(istream &file, char);
 
     bool displayMenu();
     void displayInfo();
@@ -25,10 +25,11 @@ public:
     void deleteCart(int);
     void modifyCart(int);
 
-    void updateCartItem(int id, const string& name, double price);
-
     Cart* search(int);
     void saveList();
+
+    static const string productListPath;
+    static const string cartListPath;
 
 private:
     map<int, Cart*> cartList;

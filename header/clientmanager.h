@@ -24,6 +24,8 @@ public:
 
     bool displayMenu();
 
+    static const string clientListPath;
+
 private:
     map<int, Client*> clientList;
 };

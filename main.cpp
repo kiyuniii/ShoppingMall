@@ -1,9 +1,10 @@
 #include <iostream>
+#include "shoppingmanager.h"
 #include "clientmanager.h"
 #include "productmanager.h"
-#include "shoppingmanager.h"
 #include "cartmanager.h"
 #include <string>
+#include <cstdlib>
 
 using namespace std::string_literals;
 
@@ -22,8 +23,8 @@ bool Display() {
 
     ShoppingManager* sm = new ShoppingManager();
     ClientManager* cm = new ClientManager();
+    ProductManager* pm = new ProductManager();
     CartManager* tm = new CartManager();
-    ProductManager* pm = new ProductManager(tm);
 
     if( !(std::cin >> option) ) {
         std::cout << '\n' << "Wrong input... try again." << '\n';
@@ -62,6 +63,10 @@ bool Display() {
 
 int main()
 {
+    /* 터미널 크기 : 80(가로) x 24(세로) */
+    int terminalSize = system("printf '\\e[8;24;80t'"); 
+    if (terminalSize != 0) return 1;
+
     while(Display());
     return 0;
 }

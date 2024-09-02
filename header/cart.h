@@ -8,17 +8,16 @@ using namespace std;
 class Cart
 {
 public:
-    Cart(int id, const std::string& name, double price);
+    Cart(int id, int num);
+
     int getId() const;
-    std::string getName() const;
-    double getPrice() const;
-    void setName(const std::string& name);
-    void setPrice(double price);
+    int getNum() const;
+    void setId(int id);
+    void setNum(int num);
+    
 private:
     int m_id;
-    std::string m_name;
-    double m_price;
-
+    int m_num;
 };
 
 #endif // CART_H

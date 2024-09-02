@@ -7,9 +7,11 @@
 #include "shoppingmanager.h"
 #include "product.h"
 
+const string ShoppingManager::productListPath = "data/productlist.csv";
+
 ShoppingManager::ShoppingManager() {
     ifstream file;
-    file.open("data/productlist.txt");
+    file.open(productListPath);
     if(!file.fail()) {
         while(!file.eof()) {
             vector<string> row = parseCSV(file, ',');
@@ -27,7 +29,7 @@ ShoppingManager::ShoppingManager() {
 ShoppingManager::~ShoppingManager()
 {
     ofstream file;
-    file.open("data/productlist.txt");
+    file.open(productListPath);
     if(!file.fail()) {
         for (const auto& v : productList) {
             Product *p = v.second;

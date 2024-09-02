@@ -1,8 +1,6 @@
 #ifndef PRODUCTMANAGER_H
 #define PRODUCTMANAGER_H
 
-#include "cartmanager.h"
-
 #include <map>
 #include <vector>
 
@@ -14,30 +12,26 @@ class ProductManager
 {
 public:
     ProductManager();
-    ProductManager(CartManager* cm);
     ~ProductManager();
 
     void readProductCSV();
     void writeProductCSV();
+    vector<string> parseCSV(istream&, char);
 
-    //friend class CartManager;
-
-    void inputProduct();
-    void addProduct(Product *);
+    bool displayMenu();
+    void displayInfo();
     void deleteProduct(int);
     void modifyProduct(int);
+
+    void inputProduct();
     Product* search(int);
     int makeId();
-    void displayInfo();
-    vector<string> parseCSV(istream&, char);
-    bool displayMenu();
 
+    static const string productListPath;
+    static const string cartListPath;
     //void saveList();
 private:
     map<int, Product*> productList;
-    map<int, Product*> cartList;
-    
-    CartManager* cartManager;
 };
 
 #endif // PRODUCTMANAGER_H

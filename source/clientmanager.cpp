@@ -7,10 +7,12 @@
 #include "client.h"
 #include "clientmanager.h"
 
+const string ClientManager::clientListPath = "data/clientlist.csv";
+
 ClientManager::ClientManager()
 {
     ifstream file;
-    file.open("data/clientlist.txt");
+    file.open(clientListPath);
     if(!file.fail()) {
         while(!file.eof()) {
             vector<string> row = parseCSV(file, ',');
@@ -27,7 +29,7 @@ ClientManager::ClientManager()
 ClientManager::~ClientManager()
 {
     ofstream file;
-    file.open("data/clientlist.txt");
+    file.open(clientListPath);
     if(!file.fail()) {
         for (const auto& v : clientList) {
             Client* c = v.second;

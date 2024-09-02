@@ -2,6 +2,7 @@
 #define SHOPPINGMANAGER_H
 
 #include <map>
+#include <vector>
 
 class Product;
 
@@ -18,10 +19,10 @@ public:
     void displayInfo();
     bool displayMenu();
 
+    static const string productListPath;
+
 private:
     map<int, Product*> productList;
-
-
 };
 
 #endif // SHOPPINGMANAGER_H
