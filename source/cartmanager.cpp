@@ -40,6 +40,7 @@ void CartManager::writeCartCSV() {
 }
 
 CartManager::CartManager() {
+    cartList.clear();   //객체 생성하자마자 cartList 호출
     readCartCSV();
 }
 
@@ -119,7 +120,7 @@ bool CartManager::displayMenu() {
 }
 
 void CartManager::displayInfo() {
-    readCartCSV();
+    //readCartCSV();
     
     // `productList.csv` 파일을 열고 데이터를 읽습니다.
     ifstream productFile(productListPath);
@@ -194,8 +195,7 @@ void CartManager::modifyCart(int key) {
     cout << "num : "; cin >> num;
 
     q->setNum(num);
-    cartList[num] = q;
-    writeCartCSV();
+    cartList[key] = q;
 }
 
 Cart *CartManager::search(int id) {
