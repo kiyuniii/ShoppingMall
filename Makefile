@@ -1,6 +1,7 @@
 # 컴파일러와 플래그 정의
 CXX = g++
-CXXFLAGS = -Wall -O2 -Iheader  # header 폴더를 포함하도록 -I 플래그 사용
+CXXFLAGS = -Wall -O2 -Iheader -Wextra -std=c++17  # header 폴더를 포함하도록 -I 플래그 사용
+
 
 # 소스 파일과 오브젝트 파일
 SRCS = main.cpp \
