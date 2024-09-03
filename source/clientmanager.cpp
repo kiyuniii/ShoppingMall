@@ -38,7 +38,6 @@ void ClientManager::writeLoginCSV() {
     }
     clientList.clear();
     file.close( );
-
 }
 
 ClientManager::ClientManager() {
