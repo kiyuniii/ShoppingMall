@@ -1,5 +1,5 @@
-#ifndef CARTMANAGER_H
-#define CARTMANAGER_H
+#ifndef __CARTMANAGER_H__
+#define __CARTMANAGER_H__
 
 #include <fstream>
 #include <map>
@@ -21,6 +21,7 @@ public:
 
     bool displayMenu();
     void displayInfo();
+
     void inputCart();
     void deleteCart(int);
     void modifyCart(int);
@@ -36,4 +37,4 @@ private:
 };
 
 
-#endif//CARTMANAGER_H
+#endif//C__ARTMANAGER_H__

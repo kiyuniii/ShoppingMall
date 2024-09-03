@@ -4,9 +4,11 @@
 
 using namespace std;
 
+/* Client::Client() {
+    m_id = 0; m_name = "", m_phoneNumber = "", m_address = "";
+} */
 Client::Client(int id, string name, string phoneNumber, string address)
-    : m_id(id), m_name(name), m_phoneNumber(phoneNumber), m_address(address)
-{
+    : m_id(id), m_name(name), m_phoneNumber(phoneNumber), m_address(address) {
 }
 
 string Client::getName() const
@@ -24,9 +26,9 @@ string Client::getPhoneNumber() const
     return m_phoneNumber;
 }
 
-void Client::setPhoneNumber(string& phoneNumber)
+void Client::setPhoneNumber(string& phone)
 {
-    m_phoneNumber = phoneNumber;
+    m_phoneNumber = phone;
 }
 
 string Client::getAddress() const
@@ -39,8 +41,7 @@ void Client::setAddress(string& address)
     m_address = address;
 }
 
-int Client::id() const
-{
+int Client::getId() const {
     return m_id;
 }
 

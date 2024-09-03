@@ -3,14 +3,17 @@ CXX = g++
 CXXFLAGS = -Wall -O2 -Iheader  # header 폴더를 포함하도록 -I 플래그 사용
 
 # 소스 파일과 오브젝트 파일
-SRCS = main.cpp \
-       source/client.cpp \
-       source/clientmanager.cpp \
-       source/product.cpp \
-       source/productmanager.cpp \
-       source/shoppingmanager.cpp \
-	   source/cart.cpp \
-	   source/cartmanager.cpp
+SRCS = main.cpp\
+       source/client.cpp\
+       source/clientmanager.cpp\
+       source/product.cpp\
+       source/productmanager.cpp\
+       source/shoppingmanager.cpp\
+	   source/cart.cpp\
+	   source/cartmanager.cpp\
+	   source/login.cpp\
+	   source/loginmanager.cpp\
+	   source/mainMenu.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

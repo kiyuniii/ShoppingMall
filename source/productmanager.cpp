@@ -167,6 +167,7 @@ bool ProductManager::displayMenu()
     cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
     cout << " What do you wanna do? ";
     cin >> ch;
+
     switch(ch) {
     case 1:
         displayInfo();

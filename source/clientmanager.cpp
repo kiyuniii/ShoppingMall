@@ -9,8 +9,7 @@
 
 const string ClientManager::clientListPath = "data/clientlist.csv";
 
-ClientManager::ClientManager()
-{
+void ClientManager::readLoginCSV() {
     ifstream file;
     file.open(clientListPath);
     if(!file.fail()) {
@@ -25,15 +24,13 @@ ClientManager::ClientManager()
     }
     file.close( );
 }
-
-ClientManager::~ClientManager()
-{
+void ClientManager::writeLoginCSV() {
     ofstream file;
     file.open(clientListPath);
     if(!file.fail()) {
         for (const auto& v : clientList) {
             Client* c = v.second;
-            file << c->id() << ", " << c->getName() << ", ";
+            file << c->getId() << ", " << c->getName() << ", ";
             file << c->getPhoneNumber() << ", ";
             file << c->getAddress() << endl;
             delete v.second; // client 객체 메모리 삭제
@@ -41,6 +38,15 @@ ClientManager::~ClientManager()
     }
     clientList.clear();
     file.close( );
+
+}
+
+ClientManager::ClientManager() {
+    readLoginCSV();
+}
+
+ClientManager::~ClientManager() {
+    writeLoginCSV();
 }
 
 void ClientManager::inputClient( )
@@ -48,7 +54,7 @@ void ClientManager::inputClient( )
     string name, number, address;
     cout << "name : "; cin >> name;
     cout << "number : "; cin >> number;
-    cout << "address : "; cin.ignore(); getline(cin, address, '\n'); //cin >> address;
+    cout << "address : "; cin.ignore(); getline(cin, address, '\n');
 
     int id = makeId( );
     Client* c = new Client(id, name, number, address);
@@ -69,7 +75,7 @@ void ClientManager::modifyClient(int key)
 {
     Client* c = search(key);
     cout << "  ID  |     Name     | Phone Number |       Address" << endl;
-    cout << setw(5) << setfill('0') << right << c->id() << " | " << left;
+    cout << setw(5) << setfill('0') << right << c->getId() << " | " << left;
     cout << setw(12) << setfill(' ') << c->getName() << " | ";
     cout << setw(12) << c->getPhoneNumber() << " | ";
     cout << c->getAddress() << endl;
@@ -90,16 +96,11 @@ void ClientManager::displayInfo()
     cout << endl << "  ID  |     Name     | Phone Number |       Address" << endl;
     for (const auto& v : clientList) {
         Client* c = v.second;
-        cout << setw(5) << setfill('0') << right << c->id() << " | " << left;
+        cout << setw(5) << setfill('0') << right << c->getId() << " | " << left;
         cout << setw(12) << setfill(' ') << c->getName() << " | ";
         cout << setw(12) << c->getPhoneNumber() << " | ";
         cout << c->getAddress() << endl;
     }
-}
-
-void ClientManager::addClient(Client* c)
-{
-    clientList.insert( { c->id(), c } );
 }
 
 int ClientManager::makeId( )
@@ -135,7 +136,6 @@ vector<string> ClientManager::parseCSV(istream &file, char delimiter)
     }
     return row;
 }
-
 
 bool ClientManager::displayMenu()
 {

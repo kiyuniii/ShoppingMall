@@ -1,10 +1,13 @@
 #ifndef __CLIENT_MANAGER_H__
 #define __CLIENT_MANAGER_H__
 
+#include "loginmanager.h"
+
 #include <map>
 #include <vector>
 
 class Client;
+class LoginManager;
 using namespace std;
 
 class ClientManager {
@@ -12,8 +15,10 @@ public:
     ClientManager();
     ~ClientManager();
 
+    void readLoginCSV();
+    void writeLoginCSV();
+
     void inputClient();
-    void addClient(Client*);
     void deleteClient(int);
     void modifyClient(int);
     Client* search(int);
@@ -26,8 +31,8 @@ public:
 
     static const string clientListPath;
 
-private:
     map<int, Client*> clientList;
+private:
 };
 
 #endif    // __CLIENT_MANAGER_H__

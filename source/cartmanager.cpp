@@ -116,7 +116,6 @@ bool CartManager::displayMenu() {
         cin.clear();
     }
     return true;
-
 }
 
 void CartManager::displayInfo() {
@@ -125,7 +124,7 @@ void CartManager::displayInfo() {
     // `productList.csv` 파일을 열고 데이터를 읽습니다.
     ifstream productFile(productListPath);
     if (!productFile.is_open()) {
-        cout << "Error: Unable to open product list file." << endl;
+        cout << "Error: Unable to open productlist.csv" << endl;
         return;
     }
     map<int, pair<string, int>> productInfo;
@@ -142,17 +141,18 @@ void CartManager::displayInfo() {
     }
     productFile.close(); // 파일 닫기
 
+    int result = 0;
     cout << endl << "  ID  |     Name     |   Price   |  Qty  | Total Price |" << endl;
     cout << "------------------------------------------------------" << endl; // 추가한 구분선
     for (const auto& v : cartList) {
         Cart* p = v.second;
         int id = p->getId();
         
+        int quantity = p->getNum();
+        int price = productInfo[id].second;
+        int totalPrice = price * quantity;
         // 제품 ID에 해당하는 이름과 가격을 검색하여 출력
         if (productInfo.find(id) != productInfo.end()) {
-            int price = productInfo[id].second;
-            int quantity = p->getNum();
-            int totalPrice = price * quantity;
 
             cout << setw(5) << setfill('0') << right << id << " | "; // ID 출력
             cout << setw(12) << setfill(' ') << left << productInfo[id].first << " | "; // Name 출력
@@ -169,7 +169,12 @@ void CartManager::displayInfo() {
             cout << setw(11) << setfill(' ') << right << "N/A" << " | "; // Total Price 출력, 우측 정렬
             cout << endl;
         }
+        result += totalPrice;
     }
+     
+
+    cout << "------------------------------------------------------" << endl; // 추가한 구분선
+    cout << "TOTAL PRICE : " << result;
 }
 
 void CartManager::inputCart() {
@@ -201,8 +206,3 @@ void CartManager::modifyCart(int key) {
 Cart *CartManager::search(int id) {
     return cartList[id];
 }
-
-/* void CartManager::saveList() {
-    writeCartCSV();
-}
- */

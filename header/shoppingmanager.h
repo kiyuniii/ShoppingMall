@@ -1,6 +1,8 @@
 #ifndef SHOPPINGMANAGER_H
 #define SHOPPINGMANAGER_H
 
+#include <iostream>
+#include <string>
 #include <map>
 #include <vector>
 

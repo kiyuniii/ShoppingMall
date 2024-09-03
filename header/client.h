@@ -7,6 +7,7 @@ using namespace std;
 
 class Client {
 public:
+    // Client();
     Client(int id = 0, string = "", string = "", string = "");
 
     string getName() const;
@@ -15,7 +16,8 @@ public:
     void setPhoneNumber(string&);
     string getAddress() const;
     void setAddress(string&);
-    int id() const;
+    int getId() const;
+    
     bool operator==(const Client &other) const;
 
 private:
