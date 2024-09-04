@@ -8,6 +8,8 @@
 #include <iomanip>  // setw, setfill 등을 사용하기 위해 필요
 using namespace std;
 
+const string ProductManager::productListPath = "data/productList.csv";
+
 void ProductManager::readProductCSV() {
     ifstream file;
     file.open(productListPath);

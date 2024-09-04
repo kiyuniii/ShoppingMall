@@ -32,12 +32,12 @@ private:
 
 class CartManager {
 public:
-    CartManager(int);
+    CartManager(int, int);
     CartManager();;
     ~CartManager();
 
-    void readCartCSV(int);
-    void writeCartCSV(int);
+    void readCartCSV(int, int);
+    void writeCartCSV(int, int);
     vector<string> parseCSV(istream&, char);
 
     void displayMenu(int);
@@ -47,15 +47,17 @@ public:
     void deleteCart(int, int);
     void modifyCart(int, int);
 
-    string cartListUserPath(int id);
+    string cartListUserPath(int, int);
 
 private:
     ProductManager productManager;
-    map<int, Login*> loginList;
-    vector<map<int, pair<Product*, Cart*>>> shoppingCart;
-    int userID;
-    //map<int, Cart*> cartList;
-    //map<int, pair<Login*, User*>> accountList;
+
+    vector<map<int, Login*>> userLoginList;
+    vector<map<int, Cart*>> userCartList;
+    vector<map<int, Product*>> userProductList;
+    //vector<map<int, pair<Product*, Cart*>>> shoppingCart;
+
+    int userID, productID;
 };
 
 #endif//__CARTMANAGER_H__

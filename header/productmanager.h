@@ -29,7 +29,7 @@ public:
     int makePid();
 
     static const string productListPath;
-    static const string cartListPath;
+    //const string cartListPath;
     
 private:
     map<int, Product*> productList;

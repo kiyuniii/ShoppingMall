@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-const string loginListPath = "data/loginList.csv";
+const string LoginManager::loginListPath = "data/loginList.csv";
 
 /* loginList.csv -> loginList */
 void LoginManager::readLoginCSV() {
@@ -80,7 +80,8 @@ LoginManager::~LoginManager() {
 
 void LoginManager::displayMenu() {
     int ch, key;
-    
+    string un;
+
     while(true) {
         cout << "\033[2J\033[1;1H";
         cout << "===============================" << endl
@@ -98,8 +99,11 @@ void LoginManager::displayMenu() {
                 mainMenu.displayMenu(key);
                 break;
             case 2:
-                key = checkRegister();
-                userManager.modifyUser(key);
+                cout << " USERNAME : "; cin >> un;
+                key = checkRegister(un);
+                addPassword(key, un);
+                userManager.addUser(key);
+                mainMenu.displayMenu(key);
                 break;
             case 3:
                 return;
@@ -140,11 +144,8 @@ int LoginManager::makeId() {
     }
 }
 
-int LoginManager::checkRegister() {
-    string username, password;
-
+int LoginManager::checkRegister(string username) {
     while(true) {
-        cout << "  USERNAME : "; cin >> username;
         bool isDuplicate = false;
 
         /* 중복인 경우 (if(!isDuplicate) 건너뜀) */
@@ -157,7 +158,7 @@ int LoginManager::checkRegister() {
             }
         }
 
-        /* 중복인 경우 */
+        /* 중복이 아닌 경우 */
         if(!isDuplicate) {
             int id = makeId();
             Login* p = new Login;
@@ -165,8 +166,24 @@ int LoginManager::checkRegister() {
             p->setUsername(username);
             loginList[id] = p;
 
+            tempUsername(username);
             puts("사용가능한 username입니다.");
             return id;
         }   
     }
 }
+
+void LoginManager::addPassword(int id, string username) {
+    string password = "";
+    cout << "PASSWORD : "; cin >> password;
+    Login* l = new Login();
+    loginList[id] = l;
+    loginList[id]->setUsername(tempUsername(username));
+    loginList[id]->setPassword(password);
+}
+
+/* ############################### */
+string LoginManager::tempUsername(string username) {
+    return username;
+}
+

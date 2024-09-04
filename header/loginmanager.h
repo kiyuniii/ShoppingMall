@@ -25,13 +25,14 @@ public:
 
     void displayMenu(); 
     int checkLogin();
-    int checkRegister(); //UserManager::addInfo
-
+    int checkRegister(string); //UserManager::addInfo
+    string tempUsername(string);
+    void addPassword(int, string);
 
     int makeId();
 
     static const string loginListPath;
-    static const string clientListpath;
+    //static const string clientListpath;
 
 private:
     MainMenu mainMenu;

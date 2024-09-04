@@ -4,7 +4,8 @@
 #include <sstream>
 #include <iomanip>
 
-const string userListPath = "data/userList.csv";
+const string UserManager::loginListPath = "data/loginList.csv";
+const string UserManager::userListPath = "data/userList.csv";
 
 void UserManager::readUserCSV() {
     ifstream file;
@@ -153,6 +154,12 @@ void UserManager::displayInfo() {
 
     for (const auto& v : userList) {
         User* p = v.second;
+
+        if (p == nullptr) {
+            cout << "Error: Null user pointer encountered." << endl;
+            continue;
+        }
+        
         cout << setw(5) << setfill('0') << right << p->getId() << " | " << left;
         cout << setw(12) << setfill(' ') << p->getName() << " | ";
         cout << setw(12) << setfill(' ') << p->getPhone() << " | ";
@@ -195,6 +202,27 @@ void UserManager::modifyUser(int id) {
         userList[id]->setName(name);
         userList[id]->setPhone(phone);
         userList[id]->setAddress(address);
+
+        cout << "User with ID " << id << " updated." << endl;
+    } else {
+        cout << "Error: User with ID " << id << " not found." << endl;
+    }
+}
+
+void UserManager::addUser(int id) {
+
+    if (userList.find(id) == userList.end()) {
+        string name = "", phone = "", address = "";
+        cout << "  NAME  : "; cin >> name;  
+        cout << " PHONE  : "; cin >> phone;
+        cout << "ADDRESS : "; cin >> address;
+
+        User* u = new User();
+        userList[id] = u;
+        userList[id]->setName(name);
+        userList[id]->setPhone(phone);
+        userList[id]->setAddress(address);
+
         cout << "User with ID " << id << " updated." << endl;
     } else {
         cout << "Error: User with ID " << id << " not found." << endl;

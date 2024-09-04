@@ -8,6 +8,7 @@
 /* User -> UserManger */
 #include "user.h"
 class User;
+#include "login.h"
 
 class UserManager {
 public:
@@ -16,6 +17,7 @@ public:
 
     void readUserCSV();
     void writeUserCSV();
+
     vector<string> parseCSV(istream&, char);
 
     void displayMenu(int);  //ADMIN, CLIENT
@@ -23,10 +25,13 @@ public:
     void displayUser(int);
     void deleteUser(int);
     void modifyUser(int);
+    void addUser(int);
     
+    static const string loginListPath;
     static const string userListPath;
 
 private:
+    map<int, Login*> loginList;
     map<int, User*> userList;
 };
 
