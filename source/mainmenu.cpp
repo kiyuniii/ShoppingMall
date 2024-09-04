@@ -61,7 +61,7 @@ bool MainMenu::displayMenu(int id) {
 
             cout << "\033[2J\033[1;1H";
             cout << "===============================" << endl
-                 << "=           LOGIN             =" << endl
+                 << "=           CLIENT            =" << endl
                  << "===============================" << endl
                  << " 1. 쇼핑몰                      " << endl
                  << " 2. 개인정보 수정                 " << endl

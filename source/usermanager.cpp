@@ -153,6 +153,7 @@ bool UserManager::displayMenu(int id) {
             }
         }
     }
+    return true;
 }
 
 

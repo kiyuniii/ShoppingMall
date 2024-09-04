@@ -5,6 +5,7 @@
 #include <iomanip>
 
 using namespace std;
+const string productListPath = "data/productList.csv";
 
 /* cartList_[username] : pid, num */
 string CartManager::cartListUserPath(int id, int pid) {
@@ -30,6 +31,26 @@ void CartManager::readCartCSV(int id, int pid) {
     file.close();
 }
 
+void CartManager::readProductCSV() {
+    ifstream file;
+    file.open(productListPath);
+    if (!file.fail()) {
+        while (!file.eof()) {
+            vector<string> row = parseCSV(file, ',');
+            if (row.size()) {
+                int f_pid = atoi(row[0].c_str());
+                string f_name = row[1];
+                int f_price = atoi(row[2].c_str());
+
+                Product* p = new Product(f_pid, f_name, f_price);
+                productList.insert( {f_pid, p});
+            }                                   
+        }                                      
+    }
+    file.close();
+}
+
+
 void CartManager::writeCartCSV(int id, int pid) {
     ofstream file;
     file.open(cartListUserPath(id, pid));
@@ -46,6 +67,23 @@ void CartManager::writeCartCSV(int id, int pid) {
     userCartList[id].clear();
     file.close();
 }
+
+void CartManager::writeProductCSV() {
+    ofstream file;
+    file.open(productListPath);
+    if(!file.fail()) {
+        for (const auto& v : productList) {
+            Product* p = v.second;
+            file << p->getPid() << ", ";
+            file << p->getName() << ", ";
+            file << p->getPrice() << endl;
+            delete v.second;
+        }
+    }
+    productList.clear();
+    file.close();
+}
+
 
 vector<string> CartManager::parseCSV(istream& file, char delimiter) {
     stringstream ss;
@@ -84,66 +122,109 @@ CartManager::~CartManager() {
 bool CartManager::displayMenu(int id) {
     int ch, pid;
 
-    while (true) {
-        cout << "\033[2J\033[1;1H";
-        cout << "===============================" << endl
-             << "=           장바구니            =" << endl
-             << "===============================" << endl
-             << " 1. 장바구니 목록                 " << endl
-             << " 2. 장바구니 추가                 " << endl
-             << " 3. 장바구니 삭제                 " << endl
-             << " 4. 장바구니 수정                 " << endl
-             << " 5. 메인메뉴로 이동                " << endl
-             << "================================" << endl;
-        cout << " >> "; cin >> ch;
+    cout << "\033[2J\033[1;1H";
+    cout << "===============================" << endl
+         << "=           장바구니            =" << endl
+         << "===============================" << endl
+         << " 1. 장바구니 목록                 " << endl
+         << " 2. 장바구니 추가                 " << endl
+         << " 3. 장바구니 삭제                 " << endl
+         << " 4. 장바구니 수정                 " << endl
+         << " 5. 메인메뉴로 이동                " << endl
+         << "===============================" << endl;
+    cout << " >> "; cin >> ch;
 
-        switch (ch) {
-            case 1: 
-                displayInfo(id);
-                break;
-            case 2:
-                productManager.displayInfo();
-                inputCart(id);
-                break;
-            case 3:
-                displayInfo(id);
-                cout << "   Choose Key : ";
-                cin >> pid;
-                deleteCart(id, pid);
-                break;
-            case 4:
-                displayInfo(id);
-                cout << "   Choose Key : ";
-                cin >> pid;
-                modifyCart(id, pid);
-                break;
-            case 5:
-                return false;
-            default:
-                cout << "옵션을 다시 선택해주세요." << endl;
-                continue;
-        }
-        return true;
+    switch (ch) {
+        case 1: 
+            displayInfo(id);
+            cin.ignore();
+            getchar();
+            break;
+        case 2:
+            productManager.displayInfo();
+            inputCart(id);
+            cin.ignore();
+            getchar();
+            break;
+        case 3:
+            displayInfo(id);
+            cout << "   Choose Key : ";
+            cin >> pid;
+            deleteCart(id, pid);
+            break;
+        case 4:
+            displayInfo(id);
+            cout << "   Choose Key : ";
+            cin >> pid;
+            modifyCart(id, pid);
+            break;
+        case 5:
+            return false;
+        default:
+            cout << "옵션을 다시 선택해주세요." << endl;
+            cin.ignore();
+            getchar();
     }
+    return true;
 }
 
 void CartManager::displayInfo(int id) {
+    int result = 0;
+    cout << endl << "  ID  |     Name     |   Price   |  Qty  | Total Price |" << endl;
+    cout << "------------------------------------------------------" << endl;
+    
+    
+    for (const auto& v : userCartList[id]) {
+        Cart* cart = v.second;
+        int cart_pid = cart->getPid();
+        
+   
+        Product* product = productList[cart_pid];
 
+
+        int _id = product->getPid();
+        string _name = product->getName();
+        int _price = product->getPrice();
+        int _quantity = cart->getNum();
+        int _totalprice = _price * _quantity;
+        
+        if(userCartList[id].find(cart_pid) != userCartList[id].end()) {
+            cout << setw(5) << setfill('0') << right << _id << " | ";
+            cout << setw(12) << setfill(' ') << left << _name << " | ";
+            cout << setw(9) << setfill(' ') << right << fixed << setprecision(2) << _price << " | ";
+            cout << setw(3) << setfill(' ') << right << (_quantity < 10 ? " " : "") << _quantity << " | ";
+            cout << setw(11) << setfill(' ') << right << fixed << setprecision(2) << _totalprice << " | ";
+            cout << endl;
+        } else {
+            cout << setw(5) << setfill('0') << right << id << " | ";
+            cout << setw(12) << setfill(' ') << left << "Unknown" << " | ";
+            cout << setw(9) << setfill(' ') << right << "N/A" << " | ";
+            cout << setw(3) << setfill(' ') << right << (cart->getNum() < 10 ? " " : "") << cart->getNum() << " | ";
+            cout << setw(11) << setfill(' ') << right << "N/A" << " | ";        
+        }
+        result += _totalprice;
+    }
+    cout << "------------------------------------------------------" << endl;
+    cout << "TOTAL PRICE : " << result << endl;
 }
 
-
+/* vector<map<int, Cart*>> userCartList */
 void CartManager::inputCart(int id) {
     int pid, num;
     cout << " 번호 : "; cin >> pid;
     cout << " 수량 : "; cin >> num;
-
-    
+    Cart* cart = new Cart(pid, num);
+    userCartList[id][pid] = cart;
 }
 
 void CartManager::deleteCart(int id, int pid) {
-
+    userCartList[id].erase(pid);
 }
 
 void CartManager::modifyCart(int id, int pid) {
-
+    Cart* cart = userCartList[id][pid];
+    int cnum;
+    cout << " 수량 : "; cin >> cnum;
+    cart->setNum(cnum);
+    userCartList[id][pid] = cart;
 }

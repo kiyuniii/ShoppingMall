@@ -38,6 +38,9 @@ public:
 
     void readCartCSV(int, int);
     void writeCartCSV(int, int);
+    void readProductCSV();
+    void writeProductCSV();
+
     vector<string> parseCSV(istream&, char);
 
     bool displayMenu(int);
@@ -48,13 +51,13 @@ public:
     void modifyCart(int, int);
 
     string cartListUserPath(int, int);
-
+    static const string productListPath;
 private:
     ProductManager productManager;
 
+    map<int, Product*> productList;
     vector<map<int, Login*>> userLoginList;
     vector<map<int, Cart*>> userCartList;
-    vector<map<int, Product*>> userProductList;
     //vector<map<int, pair<Product*, Cart*>>> shoppingCart;
 
     int userID, productID;
