@@ -10,14 +10,10 @@ class MainMenu {
 public:
     MainMenu();
 
-    void displayMenu(int);
+    bool displayMenu(int);
     
 private:
     /* MainMenu의 lifetime에 종속 */
-    ShoppingManager shoppingManager;
-    UserManager userManager;
-    ProductManager productManager;
-    CartManager cartManager;
 };
 
 //Mainmenu admin; Mainmenu client;

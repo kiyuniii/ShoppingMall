@@ -40,7 +40,7 @@ public:
     void writeCartCSV(int, int);
     vector<string> parseCSV(istream&, char);
 
-    void displayMenu(int);
+    bool displayMenu(int);
 
     void displayInfo(int);
     void inputCart(int);

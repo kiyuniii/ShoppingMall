@@ -73,20 +73,21 @@ ProductManager::~ProductManager() {
 }
 
 
-void ProductManager::displayMenu() {
+bool ProductManager::displayMenu() {
     int ch, key;
 
     while(true) {
+        cout << "\033[2J\033[1;1H";
         cout << "===============================" << endl
-            << "=             제품             =" << endl
-            << "===============================" << endl
-            << "  1. 제품 목록" << endl
-            << "  2. 제품 추가" << endl
-            << "  3. 제품 삭제" << endl
-            << "  4. 제품 수정" << endl
-            << "  5. 메인메뉴로 이동" << endl
-            << "===============================" << endl
-            << " >> " << endl; cin >> ch;
+             << "=             제품             =" << endl
+             << "===============================" << endl
+             << "  1. 제품 목록" << endl
+             << "  2. 제품 추가" << endl
+             << "  3. 제품 삭제" << endl
+             << "  4. 제품 수정" << endl
+             << "  5. 메인메뉴로 이동" << endl
+             << "===============================" << endl
+             << " >> "; cin >> ch;
         
         switch(ch) {
             case 1:
@@ -109,11 +110,13 @@ void ProductManager::displayMenu() {
                 cin >> key;
                 modifyProduct(key);
                 break;
+            case 5:
+                return false;
             default:
                 cout << "옵션을 다시 선택해주세요." << endl;
                 continue;
         }
-        break;
+        return true;
     }
 }
 
@@ -152,7 +155,6 @@ void ProductManager::modifyProduct(int key)
     p->setName(name);
     p->setPrice(price);
     productList[key] = p;
-    writeProductCSV();
 }
 
 int ProductManager::makePid()

@@ -7,7 +7,7 @@
 #include "shoppingmanager.h"
 #include "product.h"
 
-const string ShoppingManager::productListPath = "data/productlist.csv";
+const string ShoppingManager::productListPath = "data/productList.csv";
 
 ShoppingManager::ShoppingManager() {
     ifstream file;
@@ -162,5 +162,4 @@ bool ShoppingManager::displayMenu()
         cin.clear();
     }
     return true;
-
 }

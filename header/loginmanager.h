@@ -23,11 +23,11 @@ public:
     void writeLoginCSV();
     vector<string> parseCSV(istream&, char);
 
-    void displayMenu(); 
+    bool displayMenu(); 
     int checkLogin();
     int checkRegister(string); //UserManager::addInfo
     string tempUsername(string);
-    void addPassword(int, string);
+    void addPassword(int);
 
     int makeId();
 

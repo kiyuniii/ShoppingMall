@@ -78,7 +78,7 @@ LoginManager::~LoginManager() {
     =============================================== */
 
 
-void LoginManager::displayMenu() {
+bool LoginManager::displayMenu() {
     int ch, key;
     string un;
 
@@ -101,17 +101,17 @@ void LoginManager::displayMenu() {
             case 2:
                 cout << " USERNAME : "; cin >> un;
                 key = checkRegister(un);
-                addPassword(key, un);
+                addPassword(key);
                 userManager.addUser(key);
-                mainMenu.displayMenu(key);
+                puts("다시 로그인헤주세요.");
                 break;
             case 3:
-                return;
+                return false;
             default:
                 cout << "옵션을 다시 선택해주세요." << endl;
                 continue;
         }
-        break;
+        return true;
     }
 }
 
@@ -134,13 +134,14 @@ int LoginManager::checkLogin() {
     }
 }
 
-int LoginManager::makeId() {
+int LoginManager::makeId()
+{
     if (loginList.size() == 0) {
         return 0;
     } else {
         auto elem = loginList.end();
-        int id = (--elem)->first;
-        return ++id;
+        int pid = (--elem)->first;
+        return ++pid;
     }
 }
 
@@ -161,9 +162,7 @@ int LoginManager::checkRegister(string username) {
         /* 중복이 아닌 경우 */
         if(!isDuplicate) {
             int id = makeId();
-            Login* p = new Login;
-            p->setId(id);
-            p->setUsername(username);
+            Login* p = new Login(id, username, "");
             loginList[id] = p;
 
             tempUsername(username);
@@ -173,13 +172,15 @@ int LoginManager::checkRegister(string username) {
     }
 }
 
-void LoginManager::addPassword(int id, string username) {
+void LoginManager::addPassword(int id) {
     string password = "";
     cout << "PASSWORD : "; cin >> password;
-    Login* l = new Login();
-    loginList[id] = l;
-    loginList[id]->setUsername(tempUsername(username));
-    loginList[id]->setPassword(password);
+
+    if (loginList.find(id) != loginList.end()) {
+        loginList[id]->setPassword(password); // 기존 객체의 패스워드 설정
+    } else {
+        cout << "Error: Invalid ID. No matching user found." << endl;
+    }
 }
 
 /* ############################### */

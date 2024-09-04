@@ -81,10 +81,11 @@ CartManager::~CartManager() {
     writeCartCSV(userID, productID);
 }
 
-void CartManager::displayMenu(int id) {
+bool CartManager::displayMenu(int id) {
     int ch, pid;
 
     while (true) {
+        cout << "\033[2J\033[1;1H";
         cout << "===============================" << endl
              << "=           장바구니            =" << endl
              << "===============================" << endl
@@ -117,12 +118,12 @@ void CartManager::displayMenu(int id) {
                 modifyCart(id, pid);
                 break;
             case 5:
-                return;
+                return false;
             default:
                 cout << "옵션을 다시 선택해주세요." << endl;
                 continue;
         }
-        break;
+        return true;
     }
 }
 

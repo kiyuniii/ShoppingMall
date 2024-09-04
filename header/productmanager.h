@@ -20,7 +20,7 @@ public:
     void writeProductCSV();
     vector<string> parseCSV(istream&, char);
 
-    void displayMenu();
+    bool displayMenu();
     void displayInfo();
     void deleteProduct(int);
     void modifyProduct(int);

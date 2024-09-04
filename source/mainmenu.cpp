@@ -6,16 +6,20 @@ using namespace std;
 
 MainMenu::MainMenu() { }
 
-void MainMenu::displayMenu(int id) {
+bool MainMenu::displayMenu(int id) {
     
     /* ADMIN */
     if(id == 0) {
         int ch;
 
         while(true) {
+            ShoppingManager* shoppingManager = new ShoppingManager;
+            UserManager* userManager = new UserManager;
+            ProductManager* productManager = new ProductManager;
+
             cout << "\033[2J\033[1;1H";
             cout << "===============================" << endl
-                 << "=           LOGIN             =" << endl
+                 << "=            ADMIN             =" << endl
                  << "===============================" << endl
                  << " 1. 쇼핑몰                      " << endl
                  << " 2. 고객관리                     " << endl
@@ -26,21 +30,23 @@ void MainMenu::displayMenu(int id) {
 
             switch(ch) {
                 case 1: 
-                    shoppingManager.displayMenu();
+                    shoppingManager->displayMenu();
+                    delete shoppingManager;
                     break;
                 case 2:
-                    userManager.displayMenu(id);   //분기(ADMIN/CLIENT)
+                    userManager->displayMenu(id);   //분기(ADMIN/CLIENT)
+                    delete userManager;
                     break;
                 case 3:
-                    productManager.displayMenu();
+                    productManager->displayMenu();
+                    delete productManager;
                     break;
                 case 4:
-                    return;
+                    return false;
                 default:
                     cout << "옵션을 다시 선택해주세요." << endl;
                     continue;
             }
-            break;        
         }
     } 
 
@@ -49,6 +55,10 @@ void MainMenu::displayMenu(int id) {
         int ch;
 
         while(true) {
+            ShoppingManager* shoppingManager = new ShoppingManager;
+            UserManager* userManager = new UserManager;
+            CartManager* cartManager = new CartManager;
+
             cout << "\033[2J\033[1;1H";
             cout << "===============================" << endl
                  << "=           LOGIN             =" << endl
@@ -62,21 +72,24 @@ void MainMenu::displayMenu(int id) {
 
             switch(ch) {
                 case 1: 
-                    shoppingManager.displayMenu();
+                    shoppingManager->displayMenu();
+                    delete shoppingManager;
                     break;
                 case 2:
-                    userManager.displayMenu(id);   //분기(ADMIN/CLIENT)
+                    userManager->displayMenu(id);   //분기(ADMIN/CLIENT)
+                    delete userManager;
                     break;
                 case 3:
-                    cartManager.displayMenu(id);   //key를 받아서 멤버함수의 key로 사용
+                    cartManager->displayMenu(id);   //key를 받아서 멤버함수의 key로 사용
+                    delete cartManager;
                     break;
                 case 4:
-                    return;
+                    return false;
                 default:
                     cout << "옵션을 다시 선택해주세요." << endl;
                     continue;
             }
-            break;        
         }
     }
+    return false;
 }

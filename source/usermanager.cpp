@@ -80,12 +80,13 @@ UserManager::~UserManager() {
     =============================================== */
 
 
-void UserManager::displayMenu(int id) {
+bool UserManager::displayMenu(int id) {
     int ch;
 
     /* ADMIN */
     if(id == 0) {
         while(true) {
+            cout << "\033[2J\033[1;1H";
             cout << "===============================" << endl
                  << "=            USER             =" << endl
                  << "===============================" << endl
@@ -97,20 +98,22 @@ void UserManager::displayMenu(int id) {
             switch(ch) {
                 case 1: 
                     displayInfo();
+                    cin.ignore();
+                    getchar();
                     break;
                 case 2:
-                    return;
+                    return false;
                 default:
                     cout << "옵션을 다시 선택해주세요." << endl;
                     continue;
             }
-            break;
         }
     }
 
     /* CLIENT */
     else {
         while(true) {
+            cout << "\033[2J\033[1;1H";
             cout << "===============================" << endl
                  << "=            USER             =" << endl
                  << "===============================" << endl
@@ -124,20 +127,30 @@ void UserManager::displayMenu(int id) {
             switch(ch) {
                 case 1: 
                     displayUser(id);
+                    cin.ignore();
+                    getchar();
                     break;
                 case 2:
+                    displayUser(id);
+                    cin.ignore();
+                    getchar();
                     modifyUser(id);
                     break;
                 case 3:
-                    deleteUser(id);
+                    if(deleteUser(id)) {
+                        puts("프로그램을 종료합니다.");
+                        return false;
+                    } else {
+                        puts("삭제 실패");
+                    }
                     break;
                 case 4:
-                    return;
+                    puts("프로그램을 종료합니다.");
+                    return false;
                 default:
                     cout << "옵션을 다시 선택해주세요." << endl;
                     continue;
             }
-            break;
         }
     }
 }
@@ -170,7 +183,6 @@ void UserManager::displayInfo() {
 void UserManager::displayUser(int id) {
     // userList에 id가 있는지 확인
     if (userList.find(id) != userList.end()) {
-        cout << "   ID   : " << userList[id]->getId() << endl;
         cout << "  NAME  : " << userList[id]->getName() << endl;
         cout << " PHONE  : " << userList[id]->getPhone() << endl;
         cout << "ADDRESS : " << userList[id]->getAddress() << endl;
@@ -179,15 +191,17 @@ void UserManager::displayUser(int id) {
     }
 }
 
-void UserManager::deleteUser(int id) {
+bool UserManager::deleteUser(int id) {
     // userList에 id가 있는지 확인
     auto it = userList.find(id);
     if (it != userList.end()) {
         delete it->second;  // 메모리 해제
         userList.erase(it); // 요소 삭제
         cout << "User with ID " << id << " deleted." << endl;
+        return true;  // 삭제 성공
     } else {
         cout << "Error: User with ID " << id << " not found." << endl;
+        return false;  // 삭제 실패
     }
 }
 
@@ -210,21 +224,28 @@ void UserManager::modifyUser(int id) {
 }
 
 void UserManager::addUser(int id) {
-
+    int newId = makeId();
     if (userList.find(id) == userList.end()) {
         string name = "", phone = "", address = "";
         cout << "  NAME  : "; cin >> name;  
         cout << " PHONE  : "; cin >> phone;
         cout << "ADDRESS : "; cin >> address;
 
-        User* u = new User();
-        userList[id] = u;
-        userList[id]->setName(name);
-        userList[id]->setPhone(phone);
-        userList[id]->setAddress(address);
-
+        User* u = new User(newId, name, phone, address);
+        userList[newId] = u;
+        
         cout << "User with ID " << id << " updated." << endl;
     } else {
         cout << "Error: User with ID " << id << " not found." << endl;
+    }
+}
+
+int UserManager::makeId() {
+    if (userList.empty()) {
+        return 0;  // 초기 ID는 0으로 시작
+    } else {
+        auto elem = userList.end();
+        int maxId = (--elem)->first;  // 가장 큰 ID를 가져와 1을 더하여 반환
+        return maxId + 1;
     }
 }
