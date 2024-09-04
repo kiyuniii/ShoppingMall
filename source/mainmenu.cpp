@@ -7,10 +7,9 @@ using namespace std;
 MainMenu::MainMenu() { }
 
 bool MainMenu::displayMenu(int id) {
-    
+    int ch;
     /* ADMIN */
     if(id == 0) {
-        int ch;
 
         while(true) {
             ShoppingManager* shoppingManager = new ShoppingManager;
@@ -49,12 +48,10 @@ bool MainMenu::displayMenu(int id) {
             }
         }
     } 
-
+    
     /* CLIENT */
-    else {
-        int ch;
-
-        while(true) {
+    if (id != 0) {
+        while (true) {
             ShoppingManager* shoppingManager = new ShoppingManager;
             UserManager* userManager = new UserManager;
             CartManager* cartManager = new CartManager;
@@ -84,12 +81,21 @@ bool MainMenu::displayMenu(int id) {
                     delete cartManager;
                     break;
                 case 4:
-                    return false;
+                    delete shoppingManager;
+                    delete userManager;
+                    delete cartManager;
+                    return false;  // 프로그램 종료
                 default:
                     cout << "옵션을 다시 선택해주세요." << endl;
-                    continue;
+                    cin.ignore();
+                    getchar();
+                    break;  // 잘못된 입력이 있는 경우 루프 유지
             }
         }
-    }
+    } 
+
+    /* ADMIN */
+    // 다른 부분은 변경하지 않아도 됩니다.
+    
     return false;
 }

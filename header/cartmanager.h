@@ -5,25 +5,15 @@
 #include <vector>
 #include <map>
 
-/* Login/User -> CartManager */
+/* 필요한 헤더 포함 */
 #include "login.h"
-#include "user.h" 
-class Login;
-class User;
-
-/* Cart -> CartManager */
+#include "user.h"
 #include "cart.h"
-class Cart;
-
-/* Login -> CartManager */
-#include "login.h"
-class Login;
-
 #include "productmanager.h"
 
-class UserCart {    //Cart usercart[];
+class UserCart {
 public:
-    UserCart(int);  //id(key)별로 Cart
+    UserCart(int);
     ~UserCart();
 
 private:
@@ -33,7 +23,7 @@ private:
 class CartManager {
 public:
     CartManager(int, int);
-    CartManager();;
+    CartManager();
     ~CartManager();
 
     void readCartCSV(int, int);
@@ -41,6 +31,8 @@ public:
     void readProductCSV();
     void writeProductCSV();
 
+    void initializeUserLoginList();
+    void initializeUserCartList();
     vector<string> parseCSV(istream&, char);
 
     bool displayMenu(int);
@@ -51,16 +43,17 @@ public:
     void modifyCart(int, int);
 
     string cartListUserPath(int, int);
+
     static const string productListPath;
+
 private:
     ProductManager productManager;
 
     map<int, Product*> productList;
     vector<map<int, Login*>> userLoginList;
     vector<map<int, Cart*>> userCartList;
-    //vector<map<int, pair<Product*, Cart*>>> shoppingCart;
 
     int userID, productID;
 };
 
-#endif//__CARTMANAGER_H__
+#endif //__CARTMANAGER_H__
