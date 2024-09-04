@@ -19,7 +19,7 @@ public:
     Client* search(int);
 
     int makeId();
-    void displayInfo();
+    stringstream displayInfo();
     vector<string> parseCSV(istream&, char);
 
     bool displayMenu();

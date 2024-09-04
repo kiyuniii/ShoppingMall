@@ -64,7 +64,7 @@ bool Display() {
 int main()
 {
     /* 터미널 크기 : 80(가로) x 24(세로) */
-    int terminalSize = system("printf '\\e[8;24;80t'"); 
+    int terminalSize = system("printf '\\e[8;200;200t'"); 
     if (terminalSize != 0) return 1;
 
     while(Display());

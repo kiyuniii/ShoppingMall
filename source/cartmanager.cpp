@@ -85,7 +85,7 @@ bool CartManager::displayMenu() {
     cin >> ch;
     switch(ch) {
     case 1:
-        displayInfo();
+        std::cout << displayInfo().str();
         cin.ignore();
         getchar();
         break;
@@ -95,13 +95,13 @@ bool CartManager::displayMenu() {
         getchar();
         break;
     case 3:
-        displayInfo();
+        std::cout << displayInfo().str();
         cout << "   Choose Key : ";
         cin >> key;
         deleteCart(key);
         break;
     case 4:
-        displayInfo();
+        std::cout << displayInfo().str();
         cout << "   Choose Key : ";
         cin >> key;
         modifyCart(key);
@@ -119,14 +119,14 @@ bool CartManager::displayMenu() {
 
 }
 
-void CartManager::displayInfo() {
+stringstream CartManager::displayInfo() {
     //readCartCSV();
     
     // `productList.csv` 파일을 열고 데이터를 읽습니다.
     ifstream productFile(productListPath);
     if (!productFile.is_open()) {
         cout << "Error: Unable to open product list file." << endl;
-        return;
+        return stringstream();
     }
     map<int, pair<string, int>> productInfo;
 
@@ -141,9 +141,19 @@ void CartManager::displayInfo() {
         }
     }
     productFile.close(); // 파일 닫기
+    stringstream ss;
 
-    cout << endl << "  ID  |     Name     |   Price   |  Qty  | Total Price |" << endl;
-    cout << "------------------------------------------------------" << endl; // 추가한 구분선
+    ss << setw(60) << setfill('-') << "" <<  endl;
+    ss << setw(60) << setfill(' ') << left << "Shopping Cart" << endl;
+    ss << setw(60) << setfill('-') << "" <<  endl;
+
+    ss << setw(6) << setfill(' ')  << right << "ID" << " | " ;
+    ss << setw(16) << setfill(' ') << right <<"Name" << " | ";
+    ss << setw(10) << setfill(' ') << right <<"Price" << " | ";
+    ss << setw(5) << setfill(' ') << right <<"Qty" << " | ";
+    ss << setw(11) << setfill(' ') << right <<"Total" << endl;
+    ss << setw(60) << setfill('-') << "" <<  endl;
+
     for (const auto& v : cartList) {
         Cart* p = v.second;
         int id = p->getId();
@@ -154,22 +164,22 @@ void CartManager::displayInfo() {
             int quantity = p->getNum();
             int totalPrice = price * quantity;
 
-            cout << setw(5) << setfill('0') << right << id << " | "; // ID 출력
-            cout << setw(12) << setfill(' ') << left << productInfo[id].first << " | "; // Name 출력
-            cout << setw(9) << setfill(' ') << right << fixed << setprecision(2) << price << " | "; // Price 출력, 우측 정렬
-            cout << setw(3) << setfill(' ') << right << (quantity < 10 ? " " : "") << quantity << " | "; // Qty 출력, 가운데 정렬
-            cout << setw(11) << setfill(' ') << right << fixed << setprecision(2) << totalPrice << " | "; // Total Price 출력, 우측 정렬
-            cout << endl;
+            ss << setw(6) << setfill(' ') << right << id << " | "; // ID 출력
+            ss << setw(16) << setfill(' ') << right << productInfo[id].first << " | "; // Name 출력
+            ss << setw(10) << setfill(' ') << right << fixed << setprecision(2) << price << " | "; // Price 출력, 우측 정렬
+            ss << setw(5) << setfill(' ') << right  << quantity << " | "; // Qty 출력
+            ss << setw(11) << setfill(' ') << right << fixed << setprecision(2) << totalPrice ; // Total Price 출력, 우측 정렬
+            ss << endl;
         } else {
             // 제품 정보가 없는 경우에 대한 처리 (예: 오류 메시지)
-            cout << setw(5) << setfill('0') << right << id << " | ";
-            cout << setw(12) << setfill(' ') << left << "Unknown" << " | ";
-            cout << setw(9) << setfill(' ') << right << "N/A" << " | ";
-            cout << setw(3) << setfill(' ') << right << (p->getNum() < 10 ? " " : "") << p->getNum() << " | "; // Qty 출력, 가운데 정렬
-            cout << setw(11) << setfill(' ') << right << "N/A" << " | "; // Total Price 출력, 우측 정렬
-            cout << endl;
+            ss << setw(6) << setfill(' ') << right << id << " | ";
+            ss << setw(16) << setfill(' ') << right << "Unknown" << " | ";
+            ss << setw(10) << setfill(' ') << right << "N/A" << " | ";
+            ss << setw(5) << setfill(' ') << right  << p->getNum() << " | "; // Qty 출력
+            ss << setw(11) << setfill(' ') << right << "N/A" ; // Total Price 출력, 우측 정렬
         }
     }
+    return ss;
 }
 
 void CartManager::inputCart() {

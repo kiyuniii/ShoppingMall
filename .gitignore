@@ -2,3 +2,5 @@
 *.o
 
 source/*.o
+
+Makefile

@@ -4,8 +4,11 @@
 #include <map>
 #include <vector>
 
-class Product;
+#include "productmanager.h"
+#include "clientmanager.h"
+#include "cartmanager.h"
 
+class Product;
 using namespace std;
 
 // product sorting(by name, by price)
@@ -23,6 +26,9 @@ public:
 
 private:
     map<int, Product*> productList;
+    ProductManager pm;
+    ClientManager cm;
+    CartManager tm;
 };
 
 #endif // SHOPPINGMANAGER_H

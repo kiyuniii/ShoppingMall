@@ -73,6 +73,7 @@ void ProductManager::inputProduct()
     Product* p = new Product(id, name, price);  //Product 객체(p) 생성
     productList.insert({id, p});                //각 객체가 고유한 ID를 가지므로 덮어쓰여지지 않고 이어쓰기가 된다.
                                                 //(= 기존 값이 저장된다.)
+    writeProductCSV();
 }
 
 void ProductManager::deleteProduct(int key)
@@ -117,16 +118,27 @@ int ProductManager::makeId()
     }
 }
 
-void ProductManager::displayInfo()
+stringstream ProductManager::displayInfo()
 {
     readProductCSV();
-    cout << endl << "  ID  |     Name     | Price | "<< endl;
+    stringstream ss;
+
+    ss << setw(56) << setfill(' ') << left << "Product Info" << endl;
+    ss << setw(56) << setfill('-') << "" << endl;
+
+    ss << setw(10) << setfill(' ') << right <<"Product ID" << " | " << left;
+    ss << setw(20) << setfill(' ') << right <<"Name" << " | ";
+    ss << setw(20) << setfill(' ') << right <<"Price" << endl;
+    ss << setw(56) << setfill('-') << "" << endl;
+
     for (const auto& v : productList) {
         Product* p = v.second;
-        cout << setw(5) << setfill('0') << right << p->getId() << " | " << left;
-        cout << setw(12) << setfill(' ') << p->getName() << " | ";
-        cout << setw(12) << p->getPrice() << endl;
+        ss << setw(10) << setfill(' ') << right << p->getId() << " | " << left;
+        ss << setw(20) << setfill(' ') << right << p->getName() << " | ";
+        ss << setw(20) << right << p->getPrice() << endl;
     }
+    ss << setw(56) << setfill('-') << "" << endl;
+    return ss;
 }
 
 /* .csv의 각 줄을 파싱하고, row란 vector<string>에 저장 */
@@ -169,7 +181,7 @@ bool ProductManager::displayMenu()
     cin >> ch;
     switch(ch) {
     case 1:
-        displayInfo();
+        std::cout << displayInfo().str();
         cin.ignore();
         getchar();
         break;
@@ -177,13 +189,13 @@ bool ProductManager::displayMenu()
         inputProduct();
         break;
     case 3:
-        displayInfo();
+        std::cout << displayInfo().str();
         cout << "   Choose Key : ";
         cin >> key;
         deleteProduct(key);
         break;
     case 4:
-        displayInfo();
+        std::cout << displayInfo().str();
         cout << "   Choose Key : ";
         cin >> key;
         modifyProduct(key);

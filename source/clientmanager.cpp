@@ -85,16 +85,28 @@ void ClientManager::modifyClient(int key)
     clientList[key] = c;
 }
 
-void ClientManager::displayInfo()
+stringstream ClientManager::displayInfo()
 {
-    cout << endl << "  ID  |     Name     | Phone Number |       Address" << endl;
+    stringstream ss;
+    ss << setw(60) << setfill(' ') << left << "Client Info" << endl;
+    ss << setw(60) << setfill('-') << "" <<  endl;
+
+    ss << setw(10) << setfill(' ')  << right << "ID" << " | " ;
+    ss << setw(10) << setfill(' ') << right <<"Name" << " | ";
+    ss << setw(10) << setfill(' ') << right <<"PhoneNumber" << " | ";
+    ss << setw(20) << setfill(' ') << right <<"Email" << endl;
+    ss << setw(60) << setfill('-') << "" <<  endl;
     for (const auto& v : clientList) {
         Client* c = v.second;
-        cout << setw(5) << setfill('0') << right << c->id() << " | " << left;
-        cout << setw(12) << setfill(' ') << c->getName() << " | ";
-        cout << setw(12) << c->getPhoneNumber() << " | ";
-        cout << c->getAddress() << endl;
+        ss << setw(10) << setfill(' ') << right << c->id() << " | " << left;
+        ss << setw(10) << setfill(' ') << right << c->getName() << " | ";
+        ss << setw(10) << right << c->getPhoneNumber() << " | ";
+        ss << setw(20) << right << c->getAddress() << endl;
     }
+    ss << setw(60) << setfill('-') << "" <<  endl;
+
+
+    return ss;
 }
 
 void ClientManager::addClient(Client* c)
@@ -154,7 +166,7 @@ bool ClientManager::displayMenu()
     cin >> ch;
     switch(ch) {
     case 1: default:
-        displayInfo();
+        std::cout << displayInfo().str();
         cin.ignore();
         getchar();
         break;

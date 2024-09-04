@@ -99,13 +99,47 @@ void ShoppingManager::displaySortedInfo(string column = "id", bool reverse = fal
 }
 void ShoppingManager::displayInfo()
 {
-    cout  << "  ID  |     Name     | Price | "<< endl;
-    for (const auto& v : productList) {
-        Product* p = v.second;
-        cout << setw(5) << setfill('0') << right << p->getId() << " | " << left;
-        cout << setw(12) << setfill(' ') << p->getName() << " | ";
-        cout << setw(12) << p->getPrice() << endl;
+    /* read line by line from the string */
+    std::string stringProducts = pm.displayInfo().str();
+    std::string stringClients = cm.displayInfo().str();
+    std::string stringCarts = tm.displayInfo().str();
+    std::istringstream linesProducts(stringProducts);
+    std::istringstream linesClients(stringClients);
+    std::istringstream linesCarts(stringCarts);
+    std::string line;
+
+    /* print string Products and then append stringClients for each line */
+    bool productInfoRemains = true;
+    bool clientInfoRemains = true;
+    bool cartInfoRemains = true;
+
+
+    while (productInfoRemains || clientInfoRemains || cartInfoRemains) {
+        if (std::getline(linesProducts, line)) {
+            std::cout << line << right << " | ";
+        } else {
+            productInfoRemains = false;
+            std::cout << setw(56) << setfill(' ') << "" << " | " ;
+        }
+        if (std::getline(linesClients, line)) {
+            std::cout << line << right << " | ";
+        } else {
+            clientInfoRemains = false;
+            if (std::getline(linesCarts, line)) {
+                std::cout << line << right << " | ";
+            } else {
+                cartInfoRemains = false;
+            }
+        }
+        std::cout << '\n';
     }
+    // cout  << "  ID  |     Name     | Price | "<< endl;
+    // for (const auto& v : productList) {
+    //     Product* p = v.second;
+    //     cout << setw(5) << setfill('0') << right << p->getId() << " | " << left;
+    //     cout << setw(12) << setfill(' ') << p->getName() << " | ";
+    //     cout << setw(12) << p->getPrice() << endl;
+    // }
 
 }
 
@@ -113,23 +147,19 @@ bool ShoppingManager::displayMenu()
 {
     int ch; //key;
     cout << "\033[2J\033[1;1H";
-    cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
-    cout << "              Shopping Mall                 " << endl;
-    cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
+    cout << setw(121) << setfill('+') << "" << endl;
+    cout << "Shopping Mall" << endl;
+    cout << setw(121) << setfill('+') << "" << endl;
     cout << "\n";
-    cout << "  Product List                     " << endl;
-    cout << "---------------------------------------------" << endl;
     displayInfo();
-    cout << "---------------------------------------------" << endl;
     cout << "\n";
-    cout << "\n";
-    cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
+    cout << setw(121) << setfill('+') << "" << endl;
     cout << "  1. Sort Product by Price (low to high)     " << endl;
     cout << "  2. Sort Product by Price (high to low)     " << endl;
     cout << "  3. Sort Product by Name (A-Z)     " << endl;
     cout << "  4. Sort Product by Name (Z-A)     " << endl;
     cout << "  5. Quit this Program                       " << endl;
-    cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
+    cout << setw(121) << setfill('+') << "" << endl;
     cout << " What do you wanna do? ";
     cin >> ch;
     switch(ch) {

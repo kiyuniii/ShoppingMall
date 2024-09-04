@@ -20,7 +20,7 @@ public:
     vector<string> parseCSV(istream &file, char);
 
     bool displayMenu();
-    void displayInfo();
+    stringstream displayInfo();
     void inputCart();
     void deleteCart(int);
     void modifyCart(int);
