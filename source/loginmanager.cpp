@@ -79,11 +79,9 @@ LoginManager::~LoginManager() {
 
 
 bool LoginManager::displayMenu() {
-    int ch, key;
-    string un;
-
-
     while(true) {
+        int ch, key;
+        string un;
         UserManager* userManager = new UserManager();
         cout << "\033[2J\033[1;1H";
         cout << "===============================" << endl

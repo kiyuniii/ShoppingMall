@@ -9,5 +9,5 @@ int main()
     MainMenu admin, client;
 
     LoginManager program;
-    program.displayMenu();
+    while(program.displayMenu());
 }

@@ -23,7 +23,7 @@ bool MainMenu::displayMenu(int id) {
                  << " 1. 쇼핑몰                      " << endl
                  << " 2. 고객관리                     " << endl
                  << " 3. 제품관리                     " << endl
-                 << " 4. 프로그램 종료                 " << endl
+                 << " 4. 로그아웃                     " << endl
                  << "================================" << endl;
             cout << " >> "; cin >> ch;    
 
@@ -63,7 +63,7 @@ bool MainMenu::displayMenu(int id) {
                  << " 1. 쇼핑몰                      " << endl
                  << " 2. 개인정보 수정                 " << endl
                  << " 3. 장바구니                     " << endl
-                 << " 4. 프로그램 종료                 " << endl
+                 << " 4. 로그아웃                     " << endl
                  << "================================" << endl;
             cout << " >> "; cin >> ch;    
 
