@@ -4,11 +4,10 @@
 #include "productmanager.h"
 #include "cartmanager.h"
 
-
-
-int main() {
+int main()
+{
     MainMenu admin, client;
-    
+
     LoginManager program;
     program.displayMenu();
-}   
+}
