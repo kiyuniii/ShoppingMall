@@ -10,7 +10,7 @@ const string CartManager::productListPath = "data/productList.csv";
 
 string CartManager::cartListUserPath(int id, int pid) {
     // Check for invalid user ID or product ID
-    if (id < 0 || id >= userLoginList.size() || userLoginList[id].find(pid) == userLoginList[id].end()) {
+    if (/* id < 0 ||  */id >= userLoginList.size() || userLoginList[id].find(pid) == userLoginList[id].end()) {
         cout << "Error: Invalid user ID or product ID for creating file path." << endl;
         return "";
     }
@@ -222,6 +222,7 @@ bool CartManager::displayMenu(int id) {
 
 
 void CartManager::displayInfo(int id) {
+    
     if (id < 0 || id >= userCartList.size()) {
         cout << "Error: Invalid user ID." << endl;
         return;
