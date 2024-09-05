@@ -54,7 +54,7 @@ bool MainMenu::displayMenu(int id) {
         while (true) {
             ShoppingManager* shoppingManager = new ShoppingManager;
             UserManager* userManager = new UserManager;
-            CartManager* cartManager = new CartManager;
+            CartManager* cartManager = new CartManager(id);
 
             cout << "\033[2J\033[1;1H";
             cout << "===============================" << endl

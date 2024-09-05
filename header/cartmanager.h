@@ -1,59 +1,57 @@
 #ifndef __CARTMANAGER_H__
 #define __CARTMANAGER_H__
 
-#include <iostream>
-#include <vector>
+#include <fstream>
 #include <map>
-
-/* 필요한 헤더 포함 */
-#include "login.h"
-#include "user.h"
+#include <vector>
+#include <string>
 #include "cart.h"
-#include "productmanager.h"
 
+using namespace std;
+
+// UserCart 클래스 정의 추가
 class UserCart {
 public:
-    UserCart(int);
-    ~UserCart();
+    int userId;
+    map<int, Cart*> cartList; // 사용자별 장바구니 목록
 
-private:
-    int m_id;
+    UserCart(int id) : userId(id) {}
+
+    ~UserCart() {
+        for (auto& v : cartList) {
+            delete v.second;
+        }
+        cartList.clear();
+    }
 };
 
-class CartManager {
+class CartManager
+{
 public:
-    CartManager(int, int);
-    CartManager();
+    CartManager(int userId);  // 생성자에 userId와 username 추가
     ~CartManager();
 
-    void readCartCSV(int, int);
-    void writeCartCSV(int, int);
-    void readProductCSV();
-    void writeProductCSV();
+    void readCartCSV(int userId);  // 사용자별로 읽기
+    void writeCartCSV(int userId); // 사용자별로 쓰기
+    vector<string> parseCSV(istream &file, char);
 
-    void initializeUserLoginList();
-    void initializeUserCartList();
-    vector<string> parseCSV(istream&, char);
+    bool displayMenu(int userId); // 사용자별로 메뉴 표시
+    void displayInfo(int userId);  // 사용자별로 정보 표시
 
-    bool displayMenu(int);
+    void inputCart(int userId);  // 사용자별로 항목 추가
+    void deleteCart(int userId, int); // 사용자별로 항목 삭제
+    void modifyCart(int userId, int); // 사용자별로 항목 수정
 
-    void displayInfo(int);
-    void inputCart(int);
-    void deleteCart(int, int);
-    void modifyCart(int, int);
-
-    string cartListUserPath(int, int);
+    Cart* search(int userId, int);
 
     static const string productListPath;
 
 private:
-    ProductManager productManager;
+    static map<int, UserCart*> userCarts;  // 사용자 ID별로 UserCart 관리
+    string getCartFilename(int userId); // 사용자 ID별 파일명 생성
 
-    map<int, Product*> productList;
-    vector<map<int, Login*>> userLoginList;
-    vector<map<int, Cart*>> userCartList;
-
-    int userID, productID;
+    int userId; // 현재 CartManager 인스턴스의 사용자 ID
+    string username; // 현재 CartManager 인스턴스의 사용자 이름
 };
 
 #endif //__CARTMANAGER_H__
