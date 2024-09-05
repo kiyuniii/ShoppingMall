@@ -92,16 +92,17 @@ bool CartManager::displayMenu(int userId) {
     int ch, key;
     cout << "\033[2J\033[1;1H";
     cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
-    cout << "             Shopping Cart Manager           " << endl;
+    cout << "                    장바구니                   " << endl;
     cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
-    cout << "  1. DISPLAY Cart List                       " << endl;
-    cout << "  2. INPUT Cart                              " << endl;
-    cout << "  3. DELETE Cart                             " << endl;
-    cout << "  4. MODIFY Cart                             " << endl;
-    cout << "  5. Quit this Program                       " << endl;
+    cout << "  1. 장바구니 목록                              " << endl;
+    cout << "  2. 장바구니 추가                             " << endl;
+    cout << "  3. 장바구니 삭제                             " << endl;
+    cout << "  4. 장바구니 수정                             " << endl;
+    cout << "  5. 메인메뉴로 이동                            " << endl;
     cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
-    cout << " What do you wanna do? ";
+    cout << " >> ";
     cin >> ch;
+
     switch (ch) {
     case 1:
         displayInfo(userId);
@@ -115,20 +116,20 @@ bool CartManager::displayMenu(int userId) {
         break;
     case 3:
         displayInfo(userId);
-        cout << "   Choose Key : ";
+        cout << "   상품번호 : ";
         cin >> key;
         deleteCart(userId, key);
         break;
     case 4:
         displayInfo(userId);
-        cout << "   Choose Key : ";
+        cout << "   상품번호 : ";
         cin >> key;
         modifyCart(userId, key);
         break;
     case 5:
         return false;
     default:
-        std::cout << '\n' << "Wrong input... try again." << '\n';
+        std::cout << '\n' << "잘못 입력하셨습니다. 다시 입력해주세요" << '\n';
         std::cin.ignore();
         getchar();
         cin.clear();
@@ -155,33 +156,35 @@ void CartManager::displayInfo(int userId) {
     productFile.close();
 
     int result = 0;
-    cout << endl << "  ID  |     Name     |   Price   |  Qty  | Total Price |" << endl;
-    cout << "------------------------------------------------------" << endl;
+    cout << endl << "상품번호  |     상품이름     |   가격   |  수량  |  합계가격  |" << endl;
+    cout << "---------------------------------------------------------------" << endl;
     for (const auto& v : userCarts[userId]->cartList) {
         Cart* p = v.second;
         int id = p->getPid();
         int quantity = p->getNum();
         int price = productInfo[id].second;
         int totalPrice = price * quantity;
+
         if (productInfo.find(id) != productInfo.end()) {
-            cout << setw(5) << setfill('0') << right << id << " | ";
-            cout << setw(12) << setfill(' ') << left << productInfo[id].first << " | ";
-            cout << setw(9) << setfill(' ') << right << fixed << setprecision(2) << price << " | ";
-            cout << setw(3) << setfill(' ') << right << (quantity < 10 ? " " : "") << quantity << " | ";
-            cout << setw(11) << setfill(' ') << right << fixed << setprecision(2) << totalPrice << " | ";
+            cout << "   " << setw(7) << setfill(' ') << right << setw(4) << setfill('0') << id << setw(3) << setfill(' ') << "   | ";  // 상품번호: 4자리 숫자, 나머지 공백
+            cout << setw(15) << setfill(' ') << left << productInfo[id].first << "  | ";  // 상품이름 열 폭 조정
+            cout << setw(8) << setfill(' ') << right << price << " | ";  // 가격 열 폭 조정
+            cout << setw(5) << setfill(' ') << right << quantity << "  | ";  // 수량 열 폭 조정
+            cout << setw(10) << setfill(' ') << right << totalPrice << " | ";  // 합계가격 열 폭 조정
             cout << endl;
         } else {
-            cout << setw(5) << setfill('0') << right << id << " | ";
-            cout << setw(12) << setfill(' ') << left << "Unknown" << " | ";
-            cout << setw(9) << setfill(' ') << right << "N/A" << " | ";
-            cout << setw(3) << setfill(' ') << right << (p->getNum() < 10 ? " " : "") << p->getNum() << " | ";
-            cout << setw(11) << setfill(' ') << right << "N/A" << " | ";
+            cout <<  "   " << setw(7) << setfill(' ') << right << setw(4) << setfill('0') << id << setw(3) << setfill(' ') << "  | ";  // 상품번호: 4자리 숫자, 나머지 공백
+            cout << setw(15) << setfill(' ') << left << "Unknown" << "  | ";
+            cout << setw(8) << setfill(' ') << right << "N/A" << " | ";
+            cout << setw(5) << setfill(' ') << right << quantity << " | ";
+            cout << setw(10) << setfill(' ') << right << "N/A" << " | ";
             cout << endl;
         }
+
         result += totalPrice;
     }
-    cout << "------------------------------------------------------" << endl;
-    cout << "TOTAL PRICE : " << result;
+    cout << "---------------------------------------------------------------" << endl;
+    cout << "주문금액 : " << result << endl;
 }
 
 void CartManager::inputCart(int userId) {
