@@ -130,6 +130,13 @@ int LoginManager::checkLogin() {
             int k = v.first;
             Login* p = v.second;        // lifetime : 각 loop
             if(p->getUsername() == username && p->getPassword() == password) {
+                UserManager* u = new UserManager();
+                if (u->searchUser(k) == 0) {
+                    delete u;
+                    break;
+                }
+                delete u;
+                
                 puts("로그인 성공!");
                 return k;
             } 

@@ -80,7 +80,7 @@ UserManager::~UserManager() {
     =============================================== */
 
 
-bool UserManager::displayMenu(int id) {
+bool UserManager::displayMenu(int& id) {
     int ch;
 
     /* ADMIN */
@@ -112,7 +112,7 @@ bool UserManager::displayMenu(int id) {
 
     /* CLIENT */
     else {
-        while(true) {
+        while(true && id > 0) {
             cout << "\033[2J\033[1;1H";
             cout << "===============================" << endl
                  << "=            USER             =" << endl
@@ -137,11 +137,17 @@ bool UserManager::displayMenu(int id) {
                     modifyUser(id);
                     break;
                 case 3:
-                    if(deleteUser(id)) {
-                        puts("프로그램을 종료합니다.");
-                        return false;
+                    char yn;
+                    std::cout << "정말로 삭제하시겠습니까? (Y/N) : "; cin >> yn;
+                    if (yn == 'Y' || yn == 'y') {
+                        if(deleteUser(id)) {
+                            puts("프로그램을 종료합니다.");
+                        } else {
+                            puts("삭제 실패");
+                        }
+                        id = -1; // 유효하지 않은 id 로 변경
                     } else {
-                        puts("삭제 실패");
+                        puts("삭제 취소");
                     }
                     break;
                 case 4:
@@ -248,5 +254,13 @@ int UserManager::makeId() {
         auto elem = userList.end();
         int maxId = (--elem)->first;  // 가장 큰 ID를 가져와 1을 더하여 반환
         return maxId + 1;
+    }
+}
+
+bool UserManager::searchUser(int id) {
+    if (userList.find(id) != userList.end()) {
+        return true;
+    } else {
+        return false;
     }
 }

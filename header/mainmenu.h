@@ -10,7 +10,7 @@ class MainMenu {
 public:
     MainMenu();
 
-    bool displayMenu(int);
+    bool displayMenu(int&);
     
 private:
     /* MainMenu의 lifetime에 종속 */

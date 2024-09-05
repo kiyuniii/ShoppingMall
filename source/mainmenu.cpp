@@ -6,11 +6,10 @@ using namespace std;
 
 MainMenu::MainMenu() { }
 
-bool MainMenu::displayMenu(int id) {
+bool MainMenu::displayMenu(int& id) {
     int ch;
     /* ADMIN */
-    if(id == 0) {
-
+    if(id == 0 ) {
         while(true) {
             ShoppingManager* shoppingManager = new ShoppingManager;
             UserManager* userManager = new UserManager;
@@ -50,8 +49,8 @@ bool MainMenu::displayMenu(int id) {
     } 
     
     /* CLIENT */
-    if (id != 0) {
-        while (true) {
+    if (id > 0) {
+        while (true && id > 0) {
             ShoppingManager* shoppingManager = new ShoppingManager;
             UserManager* userManager = new UserManager;
             CartManager* cartManager = new CartManager(id);

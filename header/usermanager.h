@@ -20,12 +20,13 @@ public:
 
     vector<string> parseCSV(istream&, char);
 
-    bool displayMenu(int);  //ADMIN, CLIENT
+    bool displayMenu(int&);  //ADMIN, CLIENT
     void displayInfo();
     void displayUser(int);
     bool deleteUser(int);
     void modifyUser(int);
     void addUser(int);
+    bool searchUser(int);
     int makeId();
     
     static const string loginListPath;
