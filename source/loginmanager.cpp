@@ -82,7 +82,9 @@ bool LoginManager::displayMenu() {
     int ch, key;
     string un;
 
+
     while(true) {
+        UserManager* userManager = new UserManager();
         cout << "\033[2J\033[1;1H";
         cout << "===============================" << endl
              << "=           LOGIN             =" << endl
@@ -96,19 +98,23 @@ bool LoginManager::displayMenu() {
         switch(ch) {
             case 1: // >> mainMenu(ADMIN, CLIENT)
                 key = checkLogin();
+                delete userManager;
                 mainMenu.displayMenu(key);
                 break;
             case 2:
                 cout << " USERNAME : "; cin >> un;
                 key = checkRegister(un);
                 addPassword(key);
-                userManager.addUser(key);
+                userManager->addUser(key);
+                delete userManager;
                 puts("다시 로그인헤주세요.");
                 break;
             case 3:
+                delete userManager;
                 return false;
             default:
                 cout << "옵션을 다시 선택해주세요." << endl;
+                delete userManager;
                 continue;
         }
         return true;

@@ -36,7 +36,7 @@ public:
 
 private:
     MainMenu mainMenu;
-    UserManager userManager;
+    UserManager* userManager;
     map<int, Login*> loginList;
 };
 
